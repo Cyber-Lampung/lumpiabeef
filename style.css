@@ -27,6 +27,7 @@
 }
 
 * {
+  scroll-behavior: smooth;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -41,6 +42,10 @@ body {
   color: var(--color-text);
   background-color: var(--color-light);
   line-height: 1.7;
+}
+
+section {
+  scroll-margin-top: 80px;
 }
 
 img {
@@ -95,8 +100,7 @@ header {
 
 .logo {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
 .logo h1 {
@@ -141,9 +145,67 @@ nav a:focus {
   background-color: var(--color-primary);
 }
 
+/* --- TOMBOL & MENU HAMBURGER (MOBILE) --- */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.hamburger-btn span {
+  width: 28px;
+  height: 3px;
+  background-color: var(--color-white);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-btn.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.hamburger-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-btn.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
 @media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex;
+  }
   nav {
-    display: none;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 75%;
+    max-width: 300px;
+    height: 100vh;
+    background-color: rgba(26, 26, 26, 0.98);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 1000;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+  }
+  nav.active {
+    right: 0;
+  }
+  nav ul {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
+  nav a {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    display: block;
   }
 }
 
@@ -266,17 +328,33 @@ nav a:focus {
   box-shadow: 0 10px 25px rgba(241, 196, 15, 0.5);
 }
 
+/* ============================================== */
+/* --- TATA LETAK BARU: PRODUK & PESANAN MENYATU --- */
+/* ============================================== */
 #produk {
   padding: var(--space-xl) 5%;
   background-color: var(--color-light);
 }
 
-.produk-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-md);
+.produk-layout {
   max-width: 1200px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.produk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-md);
+}
+
+@media (max-width: 992px) {
+  .produk-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 .produk-card {
@@ -298,19 +376,27 @@ nav a:focus {
 .produk-img-wrapper {
   width: 100%;
   aspect-ratio: 4/3;
-  background-color: var(--color-white);
+  background: radial-gradient(circle, #ffffff 40%, var(--color-light) 100%);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  border-bottom: 3px solid var(--color-secondary);
+  box-shadow: inset 0 -8px 16px rgba(0, 0, 0, 0.03);
 }
 
 .produk-img-wrapper img {
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
   object-fit: contain;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
+  filter: drop-shadow(0 6px 10px rgba(44, 24, 16, 0.18));
+  transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.produk-card:hover .produk-img-wrapper img {
+  transform: scale(1.06);
 }
 
 .img-placeholder {
@@ -370,97 +456,67 @@ nav a:focus {
   transform: translateY(-2px);
 }
 
-#tentang {
-  padding: var(--space-xl) 5%;
-  background-color: var(--color-light-alt);
-}
-
-.tentang-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.card-info {
+.form-container {
   background: var(--color-white);
   padding: var(--space-lg);
   border-radius: var(--radius-md);
-  margin-bottom: var(--space-md);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-  border-left: 5px solid var(--color-secondary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-top: 5px solid var(--color-primary);
+  position: sticky;
+  top: 100px;
 }
 
-.card-info h3 {
+.h3-form-container {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
   color: var(--color-dark);
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-.card-info ul {
-  padding-left: 1.5rem;
-  list-style: disc;
+.h3-form-kontak {
+  font-family: var(--font-heading);
+  color: var(--color-dark);
+  margin-bottom: 8px;
+}
+
+.p-form-kontak {
   color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 15px;
 }
-
-#ulasan {
-  padding: var(--space-xl) 5%;
-  background-color: var(--color-primary);
-  color: var(--color-white);
+.p-wajib-dua {
   text-align: center;
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-top: 15px;
 }
 
-#ulasan .section-title {
-  color: var(--color-white);
-}
-#ulasan .section-title::after {
-  background-color: var(--color-accent);
-}
-
-.ulasan-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--space-md);
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-blockquote {
-  background: rgba(255, 255, 255, 0.1);
-  padding: var(--space-lg);
+.contact-form-container {
+  background: var(--color-white);
+  padding: 1.5rem;
   border-radius: var(--radius-md);
-  backdrop-filter: blur(5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-top: 5px solid var(--color-primary);
+  max-width: 450px;
+  margin: 3rem auto 0 auto;
   text-align: left;
 }
 
-blockquote p {
-  font-style: italic;
-  margin-bottom: 1rem;
-}
-blockquote cite {
-  font-weight: bold;
-  color: var(--color-accent);
-}
-
-#pemesanan {
-  padding: var(--space-xl) 5%;
-  background-color: var(--color-white);
-}
-
-.form-container {
-  max-width: 600px;
-  margin: 0 auto;
-  background: var(--color-light);
-  padding: var(--space-lg);
-  border-radius: var(--radius-md);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  border-top: 5px solid var(--color-primary);
+@media (max-width: 992px) {
+  .form-container {
+    position: static;
+  }
 }
 
 .cart-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--color-white);
+  background: var(--color-light);
   padding: 10px 15px;
   border-radius: var(--radius-sm);
   margin-bottom: 10px;
@@ -486,7 +542,7 @@ blockquote cite {
 }
 
 .cart-btn {
-  background: var(--color-light-alt);
+  background: var(--color-white);
   border: 1px solid #ddd;
   width: 28px;
   height: 28px;
@@ -571,11 +627,127 @@ blockquote cite {
   padding: 20px;
 }
 
+#tentang {
+  padding: var(--space-xl) 5%;
+  background-color: var(--color-light-alt);
+}
+
+.tentang-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.card-info {
+  background: var(--color-white);
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+  border-left: 5px solid var(--color-secondary);
+}
+
+.card-info h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-dark);
+}
+
+.card-info ul {
+  padding-left: 1.5rem;
+  list-style: disc;
+  color: var(--color-text-muted);
+}
+
+#ulasan {
+  padding: var(--space-xl) 5%;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  text-align: center;
+}
+
+#ulasan .section-title {
+  color: var(--color-white);
+}
+#ulasan .section-title::after {
+  background-color: var(--color-accent);
+}
+
+.ulasan-slider {
+  display: flex;
+  gap: var(--space-md);
+  overflow: hidden;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 0;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 5%,
+    black 95%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 5%,
+    black 95%,
+    transparent
+  );
+}
+
+.ulasan-track {
+  display: flex;
+  gap: var(--space-md);
+  flex-shrink: 0;
+  animation: scrollMarquee 25s linear infinite;
+}
+
+.ulasan-slider:hover .ulasan-track {
+  animation-play-state: paused;
+}
+
+.ulasan-card {
+  width: 350px;
+  flex-shrink: 0;
+}
+
+@keyframes scrollMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% - var(--space-md)));
+  }
+}
+
+blockquote {
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(5px);
+  text-align: left;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+blockquote p {
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+blockquote cite {
+  font-weight: bold;
+  color: var(--color-accent);
+}
+
 .floating-cart {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-dark);
   color: var(--color-white);
   width: 60px;
   height: 60px;
@@ -583,7 +755,6 @@ blockquote cite {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 5px 20px rgba(192, 57, 43, 0.5);
   z-index: 999;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -592,6 +763,7 @@ blockquote cite {
 .floating-cart:hover {
   transform: scale(1.1);
   background-color: var(--color-primary-dark);
+  box-shadow: 0px 0px 20px 0px #c0392b;
 }
 
 .cart-badge {
@@ -609,6 +781,74 @@ blockquote cite {
   align-items: center;
   justify-content: center;
   border: 2px solid var(--color-primary);
+}
+
+/* --- TOMBOL SCROLL TO TOP --- */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 105px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--color-primary-dark));
+  color: var(--color-white);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px #c0392b(192, 57, 43, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 998;
+}
+
+.scroll-top-btn.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.scroll-top-btn:hover {
+  transform: translateY(-8px) scale(1.1);
+  box-shadow: 0 8px 25px rgba(192, 57, 43, 0.6);
+}
+
+.scroll-top-btn svg {
+  animation: floatUp 2s infinite ease-in-out;
+}
+
+@keyframes floatUp {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* --- VALIDASI FORMULIR KONTAK --- */
+.error-msg {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: none;
+  font-weight: bold;
+}
+
+.success-msg {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: var(--radius-sm);
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+  display: none;
+  border: 1px solid #c3e6cb;
 }
 
 #toast {
@@ -648,18 +888,96 @@ blockquote cite {
 #kontak .section-title {
   color: var(--color-accent);
 }
-.contact-info {
-  margin-top: var(--space-md);
-  font-size: 1.1rem;
+
+/* Layout Kontak Baru (Side-by-side) */
+.kontak-layout {
+  max-width: 1100px;
+  margin: 3rem auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  text-align: left;
 }
-.contact-info p {
-  margin-bottom: 0.5rem;
+
+/* Responsif: Menjadi atas-bawah di layar kecil/HP */
+@media (max-width: 768px) {
+  .kontak-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+.contact-info-wrapper h3 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--color-white);
+  margin-bottom: 1rem;
+}
+
+.kontak-desc {
   color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 2rem;
+  line-height: 1.8;
+  font-size: 1.05rem;
 }
-.contact-info a {
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.detail-item .icon {
+  background: rgba(255, 255, 255, 0.05);
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(241, 196, 15, 0.3);
   color: var(--color-accent);
-  font-weight: bold;
+}
+
+.detail-item .icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.detail-item strong {
+  display: block;
+  color: var(--color-accent);
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.detail-item p,
+.detail-item a {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.detail-item a:hover {
+  color: var(--color-accent);
   text-decoration: underline;
+}
+
+.contact-form-container {
+  background: var(--color-white);
+  padding: 2.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  border-top: 5px solid var(--color-primary);
+  width: 100%;
 }
 
 footer {
